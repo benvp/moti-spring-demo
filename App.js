@@ -1,45 +1,42 @@
-import * as React from "react";
-import { StyleSheet, Pressable } from 'react-native'
-import { View, AnimatePresence } from 'moti'
+import * as React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { View as MotiView, AnimatePresence } from 'moti';
+import ScaleButton from './ScaleButton';
 
 function Shape({ bg }) {
-  return (
-    <View
-      from={{
-        opacity: 0,
-        scale: 0.5,
-      }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-      }}
-      exit={{
-        opacity: 0,
-        scale: 0.9,
-      }}
-      style={[styles.shape, { backgroundColor: bg }]}
-    />
-  )
+  return <View style={[styles.shape, { backgroundColor: bg }]} />;
 }
 
 export default function App() {
-  const [visible, toggle] = React.useReducer((s) => !s, true)
+  const [counter, increment] = React.useReducer((s) => s + 1, 0);
 
   return (
-    <Pressable onPress={toggle} style={styles.container}>
-      <AnimatePresence exitBeforeEnter>
-        {visible && <Shape bg="hotpink" key="hotpink" />}
-        {!visible && <Shape bg="cyan" key="cyan" />}
-      </AnimatePresence>
-    </Pressable>
-  )
+    <View style={styles.container}>
+      <Text style={styles.counter}>{counter}</Text>
+      <View style={styles.buttonContainer}>
+        <ScaleButton onPress={increment}>
+          <Shape bg="hotpink" />
+        </ScaleButton>
+        <ScaleButton onPress={increment}>
+          <Shape bg="cyan" />
+        </ScaleButton>
+        <ScaleButton onPress={increment}>
+          <Shape bg="yellow" />
+        </ScaleButton>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
+  counter: {
+    fontSize: 48,
+    marginBottom: 24,
+  },
   shape: {
     justifyContent: 'center',
-    height: 250,
-    width: 250,
+    height: 100,
+    width: 100,
     borderRadius: 25,
     marginRight: 10,
     backgroundColor: 'white',
@@ -48,7 +45,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
     backgroundColor: '#9c1aff',
   },
-})
+  buttonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+});
